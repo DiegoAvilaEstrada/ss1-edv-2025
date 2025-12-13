@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  application:
+  name: psi-firm
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/psi_firm'
+    username: diego
+    password: diego18
+  mail:
+    issue: Código de Verificación
+    message: Código para iniciar sesión
+    host: smtp.gmail.com
+    port: 587
+    username: deepgptsolutions@gmail.com
+    password: bypr fpxa vzpm ywpr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    approval:
+      issue: Credenciales de Acceso
+      message: Tu cuenta ha sido aprobada. Estas son tus credenciales
+mail:
+  recovery_subject: Código de Recuperación de Contraseña.
