@@ -1,4 +1,4 @@
-package ayd.back.psi_firm.config;
+package ss1.back.psi_firm.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

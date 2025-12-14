@@ -1,4 +1,4 @@
-package ayd.back.psi_firm.utils;
+package ss1.back.psi_firm.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package ayd.back.psi_firm.exception;
+package ss1.back.psi_firm.exception;
 
 import lombok.Builder;
 import lombok.Getter;
