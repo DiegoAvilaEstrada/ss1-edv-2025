@@ -1,12 +1,14 @@
 package ss1.back.psi_firm.exception;
 
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@Hidden
 @ControllerAdvice
 @Service
 @Slf4j

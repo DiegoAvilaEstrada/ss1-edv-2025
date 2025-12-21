@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -41,6 +42,10 @@ public class AuthUtils {
         calendar.setTime(actualDate);
         calendar.add(Calendar.MINUTE, minutes);
         return calendar.getTime();
+    }
+
+    public LocalDateTime createExpirationLocalDateTime(Integer minutes) {
+        return LocalDateTime.now().plusMinutes(minutes);
     }
 
 }
