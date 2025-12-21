@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ss1.back.psi_firm.dto.request.NewPacienteCuentaDto;
+import ss1.back.psi_firm.dto.request.PacienteRecoveryPasswordDto;
 import ss1.back.psi_firm.dto.response.ResponseSuccessDto;
 import ss1.back.psi_firm.service.CuentaPacienteService;
 
@@ -23,6 +24,16 @@ public class CuentaPacienteController {
         cuentaPacienteService.createCuentaPaciente(newPacienteCuentaDto);
         ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
         responseSuccessDto.setMessage("Cuenta de paciente creada con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/recovery/password")
+    public ResponseEntity<ResponseSuccessDto> recoveryPassword(PacienteRecoveryPasswordDto pacienteRecoveryPasswordDto){
+        cuentaPacienteService.recoveryPassword(pacienteRecoveryPasswordDto);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Recuperación de contraseña exitoso!");
         responseSuccessDto.setCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);

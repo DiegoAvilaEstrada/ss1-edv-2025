@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ss1.back.psi_firm.dto.request.LogInDto;
 import ss1.back.psi_firm.dto.request.NewPacienteCuentaDto;
+import ss1.back.psi_firm.dto.request.PacienteRecoveryPasswordDto;
 import ss1.back.psi_firm.dto.response.ResponseSuccessDto;
 import ss1.back.psi_firm.exception.BusinessException;
 import ss1.back.psi_firm.repository.crud.CodigoSesionPacienteCrud;
@@ -67,6 +68,28 @@ public class CuentaPacienteService {
         log.info("Código de sesión guardado para paciente: {}", logInDto.getUsername());
 
         return new ResponseSuccessDto(HttpStatus.OK.value(), "Se ha enviado un codigo a su correo", null);
+    }
+
+
+    public void recoveryPassword(PacienteRecoveryPasswordDto pacienteRecoveryPasswordDto){
+        Optional<CuentaPacienteEntity> cuentaPacienteOptional = cuentaPacienteCrud.findById(pacienteRecoveryPasswordDto.getUsername());
+        
+        if (cuentaPacienteOptional.isEmpty()) {
+            log.warn("Usuario no encontrado para recuperación de contraseña: {}", pacienteRecoveryPasswordDto.getUsername());
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        
+        if (!pacienteRecoveryPasswordDto.getNewPassword().equals(pacienteRecoveryPasswordDto.getConfirmNewPassword())) {
+            log.warn("Las contraseñas no coinciden para usuario: {}", pacienteRecoveryPasswordDto.getUsername());
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "La nueva contraseña no coincide con la confirmación");
+        }
+        
+        CuentaPacienteEntity cuentaPacienteEntity = cuentaPacienteOptional.get();
+        String hashedPassword = authUtils.hashPassword(pacienteRecoveryPasswordDto.getNewPassword());
+        cuentaPacienteEntity.setPassword(hashedPassword);
+        
+        cuentaPacienteCrud.save(cuentaPacienteEntity);
+        log.info("Contraseña actualizada exitosamente para usuario: {}", pacienteRecoveryPasswordDto.getUsername());
     }
 
 }
