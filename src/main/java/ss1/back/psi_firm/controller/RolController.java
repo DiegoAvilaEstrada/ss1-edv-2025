@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @RequestMapping("/rol")
 public class RolController {
 
-    private RolService rolService;
+    private final RolService rolService;
 
 
     @GetMapping("/all")
