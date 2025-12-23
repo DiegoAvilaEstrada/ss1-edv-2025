@@ -4,9 +4,9 @@ spring:
   application:
   name: psi-firm
   datasource:
-    url: 'jdbc:mysql://localhost:3306/psi_firm'
-    username: diego
-    password: diego18
+    url: 'jdbc:mysql://yamanote.proxy.rlwy.net:38333/psi_firm?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC'
+    username: root
+    password: DcxqZiFSGFqRYmmxQYpHIlSztezmwTYg
   mail:
     issue: Código de Verificación
     message: Código para iniciar sesión
