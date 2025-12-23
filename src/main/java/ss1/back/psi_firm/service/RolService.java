@@ -19,7 +19,7 @@ import java.util.Optional;
 public class RolService {
 
 
-    private RolCrud rolCrud;
+    private final RolCrud rolCrud;
 
 
     public ArrayList<RolEntity> getAllRoles(){
