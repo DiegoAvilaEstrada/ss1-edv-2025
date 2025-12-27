@@ -50,4 +50,33 @@ public class EmpleadoService {
         empleadoCrud.save(empleadoEntity);
     }
 
+    public void updateEmpleado(NewEmpleadoDto newEmpleadoDto){
+        Optional<EmpleadoEntity> empleadoEntityOptional = empleadoCrud.findById(newEmpleadoDto.getDpi());
+
+        if(empleadoEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Empleado no encontrado");
+        }
+
+        EmpleadoEntity empleadoEntity = empleadoEntityOptional.get();
+        empleadoEntity.setNombre(newEmpleadoDto.getNombre());
+        empleadoEntity.setApellido(newEmpleadoDto.getApellido());
+        empleadoEntity.setTelefono(newEmpleadoDto.getTelefono());
+        empleadoEntity.setEmail(newEmpleadoDto.getEmail());
+        empleadoEntity.setSalario(newEmpleadoDto.getSalario());
+        empleadoEntity.setRolEmpleado(rolService.getById(newEmpleadoDto.getIdRolEmpleado()));
+        empleadoEntity.setDescuentoIgss(newEmpleadoDto.getDescuentoIgss());
+
+        empleadoCrud.save(empleadoEntity);
+    }
+
+    public void deleteEmpleado(String dpi){
+        Optional<EmpleadoEntity> empleadoEntityOptional = empleadoCrud.findById(dpi);
+
+        if(empleadoEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Empleado no encontrado");
+        }
+
+        empleadoCrud.delete(empleadoEntityOptional.get());
+    }
+
 }

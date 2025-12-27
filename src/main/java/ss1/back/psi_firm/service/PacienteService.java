@@ -47,4 +47,31 @@ public class PacienteService {
         pacienteCrud.save(pacienteEntity);
     }
 
+    public void updatePaciente(NewPacienteDto newPacienteDto){
+        Optional<PacienteEntity> pacienteEntityOptional = pacienteCrud.findById(newPacienteDto.getDpi());
+
+        if(pacienteEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Paciente no encontrado");
+        }
+
+        PacienteEntity pacienteEntity = pacienteEntityOptional.get();
+        pacienteEntity.setNombre(newPacienteDto.getNombre());
+        pacienteEntity.setApellido(newPacienteDto.getApellido());
+        pacienteEntity.setTelefono(newPacienteDto.getTelefono());
+        pacienteEntity.setEmail(newPacienteDto.getEmail());
+        pacienteEntity.setNit(newPacienteDto.getNit());
+
+        pacienteCrud.save(pacienteEntity);
+    }
+
+    public void deletePaciente(String dpi){
+        Optional<PacienteEntity> pacienteEntityOptional = pacienteCrud.findById(dpi);
+
+        if(pacienteEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Paciente no encontrado");
+        }
+
+        pacienteCrud.delete(pacienteEntityOptional.get());
+    }
+
 }

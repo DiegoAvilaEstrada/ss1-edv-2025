@@ -54,4 +54,26 @@ public class EmpleadoController {
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<ResponseSuccessDto> updateEmpleado(@RequestBody NewEmpleadoDto newEmpleadoDto){
+
+        empleadoService.updateEmpleado(newEmpleadoDto);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Empleado actualizado con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete/{dpi}")
+    public ResponseEntity<ResponseSuccessDto> deleteEmpleado(@PathVariable(name = "dpi") String dpi){
+
+        empleadoService.deleteEmpleado(dpi);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Empleado eliminado con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
 }

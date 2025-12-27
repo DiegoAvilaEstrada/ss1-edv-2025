@@ -54,4 +54,26 @@ public class PacienteController {
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<ResponseSuccessDto> updatePaciente(@RequestBody NewPacienteDto newPacienteDto){
+
+        pacienteService.updatePaciente(newPacienteDto);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Paciente actualizado con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete/{dpi}")
+    public ResponseEntity<ResponseSuccessDto> deletePaciente(@PathVariable(name = "dpi") String dpi){
+
+        pacienteService.deletePaciente(dpi);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Paciente eliminado con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
 }
