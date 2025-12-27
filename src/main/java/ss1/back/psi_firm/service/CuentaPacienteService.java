@@ -16,6 +16,7 @@ import ss1.back.psi_firm.repository.entities.CuentaPacienteEntity;
 import ss1.back.psi_firm.repository.entities.PacienteEntity;
 import ss1.back.psi_firm.utils.AuthUtils;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -29,13 +30,18 @@ public class CuentaPacienteService {
     private final EmailService emailService;
     private final CodigoSesionPacienteCrud codigoSesionPacienteCrud;
 
+    public ArrayList<CuentaPacienteEntity> getAll(){
+        return (ArrayList<CuentaPacienteEntity>) cuentaPacienteCrud.findAll();
+    }
+
     public void createCuentaPaciente(NewPacienteCuentaDto newPacienteCuentaDto){
 
         PacienteEntity pacienteEntity = pacienteService.getById(newPacienteCuentaDto.getDpi());
 
         CuentaPacienteEntity cuentaPacienteEntity = new CuentaPacienteEntity();
         cuentaPacienteEntity.setUsername(newPacienteCuentaDto.getUsername());
-        cuentaPacienteEntity.setPassword(newPacienteCuentaDto.getPassword());
+        String hashedPassword = authUtils.hashPassword(newPacienteCuentaDto.getPassword());
+        cuentaPacienteEntity.setPassword(hashedPassword);
         cuentaPacienteEntity.setPaciente(pacienteEntity);
 
         cuentaPacienteCrud.save(cuentaPacienteEntity);

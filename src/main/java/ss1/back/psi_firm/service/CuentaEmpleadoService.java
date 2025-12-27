@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import ss1.back.psi_firm.dto.request.EmpleadoRecoveryPasswordDto;
 import ss1.back.psi_firm.dto.request.LogInDto;
 import ss1.back.psi_firm.dto.request.NewCuentaEmpleadoDto;
 import ss1.back.psi_firm.dto.response.ResponseSuccessDto;
@@ -16,6 +17,7 @@ import ss1.back.psi_firm.repository.entities.CuentaEmpleadoEntity;
 import ss1.back.psi_firm.repository.entities.EmpleadoEntity;
 import ss1.back.psi_firm.utils.AuthUtils;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -29,6 +31,9 @@ public class CuentaEmpleadoService {
     private final EmailService emailService;
     private final CodigoSesionEmpleadoCrud codigoSesionEmpleadoCrud;
 
+    public ArrayList<CuentaEmpleadoEntity> getAll(){
+        return (ArrayList<CuentaEmpleadoEntity>) cuentaEmpleadoCrud.findAll();
+    }
 
     public void createCuentaEmpleado(NewCuentaEmpleadoDto newCuentaEmpleadoDto){
 
@@ -70,9 +75,25 @@ public class CuentaEmpleadoService {
         return new ResponseSuccessDto(HttpStatus.OK.value(), "Se ha enviado un codigo a su correo", null);
     }
 
-
-
-
-    
+    public void recoveryPassword(EmpleadoRecoveryPasswordDto empleadoRecoveryPasswordDto){
+        Optional<CuentaEmpleadoEntity> cuentaEmpleadoOptional = cuentaEmpleadoCrud.findById(empleadoRecoveryPasswordDto.getUsername());
+        
+        if (cuentaEmpleadoOptional.isEmpty()) {
+            log.warn("Usuario no encontrado para recuperación de contraseña: {}", empleadoRecoveryPasswordDto.getUsername());
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        
+        if (!empleadoRecoveryPasswordDto.getNewPassword().equals(empleadoRecoveryPasswordDto.getConfirmNewPassword())) {
+            log.warn("Las contraseñas no coinciden para usuario: {}", empleadoRecoveryPasswordDto.getUsername());
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "La nueva contraseña no coincide con la confirmación");
+        }
+        
+        CuentaEmpleadoEntity cuentaEmpleadoEntity = cuentaEmpleadoOptional.get();
+        String hashedPassword = authUtils.hashPassword(empleadoRecoveryPasswordDto.getNewPassword());
+        cuentaEmpleadoEntity.setPassword(hashedPassword);
+        
+        cuentaEmpleadoCrud.save(cuentaEmpleadoEntity);
+        log.info("Contraseña actualizada exitosamente para usuario: {}", empleadoRecoveryPasswordDto.getUsername());
+    }
 
 }
