@@ -9,6 +9,7 @@ import ss1.back.psi_firm.exception.BusinessException;
 import ss1.back.psi_firm.repository.crud.DetalleFacturaCrud;
 import ss1.back.psi_firm.repository.entities.DetalleFacturaEntity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -42,6 +43,12 @@ public class DetalleFacturaService {
         detalleFacturaEntity.setProducto(productoService.getById(newDetalleFacturaDto.getIdProducto()));
         detalleFacturaEntity.setCantidad(newDetalleFacturaDto.getCantidad());
         detalleFacturaEntity.setCostoTotal(newDetalleFacturaDto.getCostoTotal());
+        
+        BigDecimal montoTotalActual = detalleFacturaEntity.getFactura().getMontoTotal();
+        BigDecimal cantidadBigDecimal = BigDecimal.valueOf(newDetalleFacturaDto.getCantidad());
+        BigDecimal precioVenta = detalleFacturaEntity.getProducto().getPrecioVenta().multiply(cantidadBigDecimal);
+        BigDecimal nuevoMontoTotal = montoTotalActual.add(precioVenta);
+        detalleFacturaEntity.getFactura().setMontoTotal(nuevoMontoTotal);
 
         detalleFacturaCrud.save(detalleFacturaEntity);
     }

@@ -31,7 +31,7 @@ public class FacturaController {
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ResponseSuccessDto> getFacturaById(@PathVariable(name = "id") Integer id){
 
         FacturaEntity facturaEntity = facturaService.getById(id);
@@ -39,6 +39,18 @@ public class FacturaController {
         responseSuccessDto.setResponseObject(facturaEntity);
         responseSuccessDto.setCode(HttpStatus.OK.value());
         responseSuccessDto.setMessage("Factura encontrada con éxito");
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{dpi}")
+    public ResponseEntity<ResponseSuccessDto> getFacturasByPacienteDpi(@PathVariable(name = "dpi") String dpi){
+
+        ArrayList<FacturaEntity> facturas = facturaService.getByPacienteDpi(dpi);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+        responseSuccessDto.setMessage("Facturas obtenidas con éxito");
+        responseSuccessDto.setResponseObject(facturas);
 
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }

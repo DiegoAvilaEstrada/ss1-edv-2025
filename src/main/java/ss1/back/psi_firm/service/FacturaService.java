@@ -9,7 +9,10 @@ import ss1.back.psi_firm.exception.BusinessException;
 import ss1.back.psi_firm.repository.crud.FacturaCrud;
 import ss1.back.psi_firm.repository.entities.FacturaEntity;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -35,13 +38,20 @@ public class FacturaService {
         return facturaEntityOptional.get();
     }
 
+    public ArrayList<FacturaEntity> getByPacienteDpi(String dpi){
+        // Verificar que el paciente existe
+        pacienteService.getById(dpi);
+        
+        return (ArrayList<FacturaEntity>) facturaCrud.findByPacienteDpi(dpi);
+    }
+
     public void createNewFactura(NewFacturaDto newFacturaDto){
 
         FacturaEntity facturaEntity = new FacturaEntity();
         facturaEntity.setPaciente(pacienteService.getById(newFacturaDto.getDpiPaciente()));
         facturaEntity.setTratamiento(tratamientoService.getById(newFacturaDto.getIdTratamiento()));
-        facturaEntity.setFechaEmision(newFacturaDto.getFechaEmision());
-        facturaEntity.setMontoTotal(newFacturaDto.getMontoTotal());
+        facturaEntity.setFechaEmision(LocalDate.now());
+        facturaEntity.setMontoTotal(new BigDecimal(0.0));
 
         facturaCrud.save(facturaEntity);
     }

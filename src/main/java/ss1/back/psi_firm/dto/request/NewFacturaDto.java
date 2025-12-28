@@ -16,8 +16,6 @@ public class NewFacturaDto {
 
     private String dpiPaciente;
     private Integer idTratamiento;
-    private LocalDate fechaEmision;
-    private BigDecimal montoTotal;
 
 }
 
