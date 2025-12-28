@@ -21,6 +21,7 @@ public class DetalleFacturaService {
     private final DetalleFacturaCrud detalleFacturaCrud;
     private final FacturaService facturaService;
     private final ProductoService productoService;
+    private final InventarioService inventarioService;
 
     public ArrayList<DetalleFacturaEntity> getAll(){
         return (ArrayList<DetalleFacturaEntity>) detalleFacturaCrud.findAll();
@@ -49,6 +50,16 @@ public class DetalleFacturaService {
         BigDecimal precioVenta = detalleFacturaEntity.getProducto().getPrecioVenta().multiply(cantidadBigDecimal);
         BigDecimal nuevoMontoTotal = montoTotalActual.add(precioVenta);
         detalleFacturaEntity.getFactura().setMontoTotal(nuevoMontoTotal);
+
+        /*se aumenta la cantidad de ventas de un producto, y se reduce el stcok*/
+        Integer idProducto = detalleFacturaEntity.getProducto().getId();
+        Integer cantidad = newDetalleFacturaDto.getCantidad();
+        
+        inventarioService.modificarStockVentasInventario(
+            idProducto,
+            -cantidad,  // stock negativo para reducir
+            cantidad   // ventas realizadas positivo para aumentar
+        );
 
         detalleFacturaCrud.save(detalleFacturaEntity);
     }

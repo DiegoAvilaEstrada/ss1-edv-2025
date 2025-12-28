@@ -15,6 +15,5 @@ public class NewInventarioDto {
     private Integer idProducto;
     private Integer stock;
     private Integer minimoStock;
-    private Integer ventasRealizadas;
 
 }

@@ -36,6 +36,7 @@ public class InventarioService {
         return inventarioEntityOptional.get();
     }
 
+    /*es agregar más productos al inventario sin repetir registros con productos iguales*/
     public void createNewInventario(NewInventarioDto newInventarioDto){
 
         Optional<ProductoEntity> productoEntityOptional = productoCrud.findById(newInventarioDto.getIdProducto());
@@ -44,11 +45,34 @@ public class InventarioService {
             throw new BusinessException(HttpStatus.NOT_FOUND, "Producto no encontrado");
         }
 
-        InventarioEntity inventarioEntity = new InventarioEntity();
-        inventarioEntity.setProducto(productoEntityOptional.get());
-        inventarioEntity.setStock(newInventarioDto.getStock());
-        inventarioEntity.setMinimoStock(newInventarioDto.getMinimoStock());
-        inventarioEntity.setVentasRealizadas(newInventarioDto.getVentasRealizadas());
+        Optional<InventarioEntity> inventarioEntityOptional = inventarioCrud.findByProductId(productoEntityOptional.get().getId());
+
+        InventarioEntity inventarioEntity;
+
+        if(inventarioEntityOptional.isEmpty()){
+            inventarioEntity = new InventarioEntity();
+            inventarioEntity.setProducto(productoEntityOptional.get());
+            inventarioEntity.setStock(newInventarioDto.getStock());
+            inventarioEntity.setMinimoStock(newInventarioDto.getMinimoStock());
+            inventarioEntity.setVentasRealizadas(0);
+        }else{
+            inventarioEntity = inventarioEntityOptional.get();
+            inventarioEntity.setStock(inventarioEntity.getStock()+newInventarioDto.getStock());
+        }
+
+        inventarioCrud.save(inventarioEntity);
+    }
+
+    public void modificarStockVentasInventario(Integer idProducto, int stock, int ventasRealizadas){
+        Optional<InventarioEntity> inventarioEntityOptional = inventarioCrud.findByProductId(idProducto);
+
+        if(inventarioEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Inventario no encontrado para el producto especificado");
+        }
+
+        InventarioEntity inventarioEntity = inventarioEntityOptional.get();
+        inventarioEntity.setStock(inventarioEntity.getStock() + stock);
+        inventarioEntity.setVentasRealizadas(inventarioEntity.getVentasRealizadas() + ventasRealizadas);
 
         inventarioCrud.save(inventarioEntity);
     }
