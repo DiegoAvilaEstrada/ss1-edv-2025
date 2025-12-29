@@ -31,6 +31,17 @@ public class EmpleadoController {
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }
 
+    @GetMapping("/all/{rol}")
+    public ResponseEntity<ResponseSuccessDto> getEmpleadosByRol(@PathVariable(name = "rol") String rol){
+
+        ArrayList<EmpleadoEntity> empleados = empleadoService.getByRol(rol);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+        responseSuccessDto.setMessage("Empleados obtenidos con éxito");
+        responseSuccessDto.setResponseObject(empleados);
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
     @GetMapping("/{dpi}")
     public ResponseEntity<ResponseSuccessDto> getEmpleadoById(@PathVariable(name = "dpi") String dpi){
 

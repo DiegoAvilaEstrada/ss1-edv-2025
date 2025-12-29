@@ -54,4 +54,26 @@ public class MedicacionController {
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
     }
 
+    @PostMapping("/update/{id}")
+    public ResponseEntity<ResponseSuccessDto> updateMedicacion(@PathVariable(name = "id") Integer id, @RequestBody NewMedicacionDto newMedicacionDto){
+
+        medicacionService.updateMedicacion(id, newMedicacionDto);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Medicación actualizada con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<ResponseSuccessDto> deleteMedicacion(@PathVariable(name = "id") Integer id){
+
+        medicacionService.deleteMedicacion(id);
+        ResponseSuccessDto responseSuccessDto = new ResponseSuccessDto();
+        responseSuccessDto.setMessage("Medicación eliminada con éxito");
+        responseSuccessDto.setCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.OK);
+    }
+
 }

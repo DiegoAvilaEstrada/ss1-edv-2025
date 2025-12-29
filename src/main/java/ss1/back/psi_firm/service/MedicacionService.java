@@ -46,4 +46,30 @@ public class MedicacionService {
         medicacionCrud.save(medicacionEntity);
     }
 
+    public void updateMedicacion(Integer id, NewMedicacionDto newMedicacionDto){
+        Optional<MedicacionEntity> medicacionEntityOptional = medicacionCrud.findById(id);
+
+        if(medicacionEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Medicación no encontrada");
+        }
+
+        MedicacionEntity medicacionEntity = medicacionEntityOptional.get();
+        medicacionEntity.setTratamiento(tratamientoService.getById(newMedicacionDto.getIdTratamiento()));
+        medicacionEntity.setProducto(productoService.getById(newMedicacionDto.getIdProducto()));
+        medicacionEntity.setDosis(newMedicacionDto.getDosis());
+        medicacionEntity.setFrecuencia(newMedicacionDto.getFrecuencia());
+
+        medicacionCrud.save(medicacionEntity);
+    }
+
+    public void deleteMedicacion(Integer id){
+        Optional<MedicacionEntity> medicacionEntityOptional = medicacionCrud.findById(id);
+
+        if(medicacionEntityOptional.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "Medicación no encontrada");
+        }
+
+        medicacionCrud.delete(medicacionEntityOptional.get());
+    }
+
 }

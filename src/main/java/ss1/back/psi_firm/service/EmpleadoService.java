@@ -35,6 +35,10 @@ public class EmpleadoService {
         return empleadoEntityOptional.get();
     }
 
+    public ArrayList<EmpleadoEntity> getByRol(String rol){
+        return (ArrayList<EmpleadoEntity>) empleadoCrud.findByRolEmpleadoRol(rol);
+    }
+
     public void createNewEmpleado(NewEmpleadoDto newEmpleadoDto){
 
         EmpleadoEntity empleadoEntity = new EmpleadoEntity();

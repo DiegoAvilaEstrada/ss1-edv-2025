@@ -8,6 +8,7 @@ import ss1.back.psi_firm.dto.request.NewDetalleFacturaDto;
 import ss1.back.psi_firm.exception.BusinessException;
 import ss1.back.psi_firm.repository.crud.DetalleFacturaCrud;
 import ss1.back.psi_firm.repository.entities.DetalleFacturaEntity;
+import ss1.back.psi_firm.repository.entities.ProductoEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,15 +40,16 @@ public class DetalleFacturaService {
 
     public void createNewDetalleFactura(NewDetalleFacturaDto newDetalleFacturaDto){
 
+        ProductoEntity producto = productoService.getById(newDetalleFacturaDto.getIdProducto());
         DetalleFacturaEntity detalleFacturaEntity = new DetalleFacturaEntity();
         detalleFacturaEntity.setFactura(facturaService.getById(newDetalleFacturaDto.getIdFactura()));
-        detalleFacturaEntity.setProducto(productoService.getById(newDetalleFacturaDto.getIdProducto()));
+        detalleFacturaEntity.setProducto(producto);
         detalleFacturaEntity.setCantidad(newDetalleFacturaDto.getCantidad());
-        detalleFacturaEntity.setCostoTotal(newDetalleFacturaDto.getCostoTotal());
+        BigDecimal cantidadBigDecimal = BigDecimal.valueOf(newDetalleFacturaDto.getCantidad());
+        detalleFacturaEntity.setCostoTotal(producto.getPrecioVenta().multiply(cantidadBigDecimal));
         
         BigDecimal montoTotalActual = detalleFacturaEntity.getFactura().getMontoTotal();
-        BigDecimal cantidadBigDecimal = BigDecimal.valueOf(newDetalleFacturaDto.getCantidad());
-        BigDecimal precioVenta = detalleFacturaEntity.getProducto().getPrecioVenta().multiply(cantidadBigDecimal);
+        BigDecimal precioVenta = producto.getPrecioVenta().multiply(cantidadBigDecimal);
         BigDecimal nuevoMontoTotal = montoTotalActual.add(precioVenta);
         detalleFacturaEntity.getFactura().setMontoTotal(nuevoMontoTotal);
 
